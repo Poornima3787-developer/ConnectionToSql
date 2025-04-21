@@ -2,11 +2,10 @@ const express=require('express');
 const studentController=require('../controller/studentController');
 const router=express.Router();
 
-router.post("/user",studentController.addUser);
-router.get('/user', studentController.getUsers);
-
-router.post("/buses",studentController.addBus);
-router.get('/buses/available/:seats', studentController.getAvailableBuses);
-
+router.post("/students",studentController.addUser);
+router.get('/students', studentController.getUsers);
+router.get('/students/:id',studentController.getID);
+router.put('/students/:id',studentController.putID);
+router.delete('/students/:id',studentController.deleteID);
 
 module.exports=router;
