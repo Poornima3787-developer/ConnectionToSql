@@ -1,55 +1,51 @@
 const db=require('../utils/db-connection');
 
-const addEntries=(req,res)=>{
-  const {email , name}=req.body;
-  const insertQuery='INSERT INTO students (email,name) VALUES(?,?)';
-  db.execute(insertQuery,[email,name],(err)=>{
+const addUser=(req,res)=>{
+  const {name,email}=req.body;
+  const insertQuery='INSERT INTO students (name,email) VALUES(?,?)';
+  db.execute(insertQuery,[name,email],(err)=>{
     if(err){
       console.log(err.message);
       res.status(500).send(err.message);
       return ;
     }
-    console.log("value ha been inserted");
+    console.log("value has been inserted");
     res.status(200).send(`Student with name ${name} successfully added`)
   })
 }
 
-const updateEntry=(req,res)=>{
-  const {id}=req.params;
-  const {name}=req.body;
-  const updateQuery="UPDATE Students set name=? WHERE id=?";
-  db.execute(updateQuery,[name,id],(err,result)=>{
-    if(err){
+const getUsers = (req, res) => {
+  db.execute("SELECT * FROM users", (err, results) => {
+    if (err) return res.status(500).send(err.message);
+    res.status(200).json(results);
+  });
+};
+
+const addBus = (req, res) => {
+  const { bus_numbers, total_seats, available_seats } = req.body;
+  const query = "INSERT INTO buses (bus_number, total_seats, available_seats) VALUES (?, ?, ?)";
+  db.execute(query, [bus_numbers, total_seats, available_seats], (err) => {
+    if(err) {
       console.log(err.message);
       res.status(500).send(err.message);
       return ;
     }
-    if(result.affectedRows===0){
-      res.status(404).send("Student not found");
-      return ;
-    }
-    res.status(200).send("user has been updated");
-  })
-}
+    console.log("buses details has been inserted");
+  });
+};
 
-const deleteEntry=(req,res)=>{
-  const {id}=req.params;
-  const deleteQuery='DELETE FROM Students WHERE id=?';
+const getAvailableBuses = (req, res) => {
+  const minSeats = parseInt(req.params.seats);
+  const query = "SELECT * FROM buses WHERE available_seats > ?";
+  db.execute(query, [minSeats], (err, results) => {
+    if (err) return res.status(500).send(err.message);
+    res.status(200).json(results);
+  });
+};
 
-  db.execute(deleteQuery,[id],(err,results)=>{
-    if(err){
-      console.log(err.message);
-      res.status(500).send(err.message);
-    }
-    if(results.affectedRows===0){
-      res.status(404).send("Student is not found");
-      return;
-    }
-    res.status(200).send(`User with ${id} is deleted`)
-  })
-}
 module.exports={
-  addEntries,
-  updateEntry,
-  deleteEntry
+  addUser,
+  getUsers,
+  addBus,
+  getAvailableBuses
 }

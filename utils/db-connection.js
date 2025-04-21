@@ -14,19 +14,40 @@ connection.connect((err) => {
   }
 
   console.log("Connection has been created");
-  const creationQuery=`create table IF NOT EXISTS Students(
+  const creationQuery=()=>{
+  const userQuery=`create table IF NOT EXISTS users(
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100),
   email VARCHAR(100)
   )`
-  connection.execute(creationQuery,(err)=>{
+
+  const busesQuery=`create table IF NOT EXISTS buses(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  bus_numbers VARCHAR(20),
+  total_seats INT,
+  available_seats INT
+  )`
+
+  connection.execute(userQuery,(err)=>{
     if(err){
       console.log(err);
       connection.end();
       return;
     }
-    console.log("Table is created")
+    console.log("User table is created")
   })
+
+  connection.execute(busesQuery,(err)=>{
+    if(err){
+      console.log(err);
+      connection.end();
+      return;
+    }
+    console.log("buses table is created")
+  })
+};
+creationQuery();
+
 })
 
 module.exports=connection;
