@@ -1,5 +1,6 @@
 const db=require('../utils/db-connection');
-const User=require('../models/user')
+const User=require('../models/user');
+const ID=require('../models/id')
 const addEntries=async (req,res)=>{
   try{
     const {name,email,age}=req.body;
@@ -15,6 +16,19 @@ const addEntries=async (req,res)=>{
   }
  
 };
+
+const addingValues =async (req,res)=>{
+  try {
+    const user= await User.create(req.body.user);
+    const id=ID.create({
+      ...req.body.ID,
+      id:id.id
+    })
+    res.status(201).json({user,id})
+  } catch (error) {
+    res.status(500).json({error:error.message});
+  }
+}
 
 const getAllUsers = async (req, res) => {
   try {
@@ -62,5 +76,6 @@ module.exports={
   addEntries,
   getAllUsers,
   updateEntry,
-  deleteEntry
+  deleteEntry,
+  addingValues
 }

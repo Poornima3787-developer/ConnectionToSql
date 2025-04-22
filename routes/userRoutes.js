@@ -7,6 +7,7 @@ router.post("/users",userController.addEntries);
 router.get("/users", userController.getAllUsers);
 
 router.put('/update/:id',userController.updateEntry);
+router.post('/addingStudentWithCard',userController.addingValues)
 
 router.delete('/delete/:id', userController.deleteEntry);
 
