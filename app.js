@@ -1,5 +1,7 @@
 const express = require('express');
 const db=require('./utils/db-connection');
+const userRoutes=require('./routes/userRoutes');
+const courseRoutes=require('./routes/courseRoute');
 
 //models
 require('./models')
@@ -11,8 +13,8 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.use('/',require('./routes/userRoutes'));
-app.use('/',require('./routes/busRoutes'));
+app.use('/students',userRoutes);
+app.use('/course',courseRoutes);
 
 db.sync({force:false}).then(()=>{
   app.listen(3000, () => {
